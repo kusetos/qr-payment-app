@@ -5,31 +5,27 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { toast } from "sonner";
 import WalletButton from "@/components/WalletButton";
 import WalletInfo from "@/components/WalletInfo";
-import TransferForm from "@/components/TransferSol";
 import { ModeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { Wallet, LogOut, QrCode, Zap } from 'lucide-react';
-import { QRCodeSVG } from "qrcode.react";
+import { Wallet, LogOut, QrCode } from 'lucide-react';
 import ScanQR from "@/components/ScanQR";
 import GenerateQR from "@/components/GenerateQR";
+import { PhantomProvider } from "@/types/phantom";
 
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [balance, setBalance] = useState<number>(0);
-  const [provider, setProvider] = useState<any>(null);
+  const [provider, setProvider] = useState<PhantomProvider | null>(null);
   const [action, setAction] = useState<"generate" | "pay" | null>(null)
 
   // ✅ инициализация провайдера
   useEffect(() => {
-    const { solana } = window as any;
+    const { solana } = window as unknown as { solana?: PhantomProvider };
     if (solana?.isPhantom) {
       setProvider(solana);
 
@@ -49,7 +45,7 @@ export default function Home() {
 
   // ✅ функция подключения
   const connectWallet = async () => {
-    const { solana } = window as any;
+    const { solana } = window as unknown as { solana?: PhantomProvider };
     if (!solana?.isPhantom) {
       toast.error("Phantom wallet not found", {
         description: "Please install Phantom extension",
@@ -78,11 +74,10 @@ export default function Home() {
       toast.success("Wallet connected", {
         description: `Address: ${address.slice(0, 4)}...${address.slice(-4)} | Balance: ${(balanceLamports / 1e9).toFixed(2)} SOL`,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
       console.error("Wallet connection error:", err);
-      toast.error("Failed to connect wallet", {
-        description: err.message ?? "Unknown error",
-      });
+      toast.error("Failed to connect wallet", { description: message });
     }
   };  
 

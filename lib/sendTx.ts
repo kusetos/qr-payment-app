@@ -10,11 +10,12 @@ import {
   getAssociatedTokenAddressSync,
   getAccount,
 } from "@solana/spl-token";
+import { PhantomProvider } from "@/types/phantom";
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 // -------- Send Native SOL --------
 export async function sendSol(
-  provider: any,
+  provider: PhantomProvider | null,
   toAddress: string,
   amountSol: number
 ) {
@@ -46,7 +47,7 @@ export async function sendSol(
 
 // -------- Send SPL Token (USDC, USDT, etc.) --------
 export async function sendSplToken(
-  provider: any,
+  provider: PhantomProvider | null,
   toAddress: string,
   amount: number,
   symbol: string

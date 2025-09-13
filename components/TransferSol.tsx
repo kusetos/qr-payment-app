@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { sendSol, sendSplToken } from "@/lib/sendTx";
+import { PhantomProvider } from "@/types/phantom";
 
-export default function TransferForm({ provider }: { provider: any }) {
+export default function TransferForm({ provider }: { provider: PhantomProvider | null }) {
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("SOL");
@@ -30,9 +31,10 @@ export default function TransferForm({ provider }: { provider: any }) {
         );
       }
       setTxid(sig);
-    } catch (err) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
       console.error(err);
-      alert("Transaction failed: " + (err as any).message);
+      alert("Transaction failed: " + message);
     } finally {
       setLoading(false);
     }

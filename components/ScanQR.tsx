@@ -6,6 +6,7 @@ import { sendSol, sendSplToken } from "@/lib/sendTx";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { PhantomProvider } from "@/types/phantom";
 
 interface ParsedQR {
   to: string;
@@ -15,7 +16,7 @@ interface ParsedQR {
 
 type TxStatus = "idle" | "loading" | "success" | "error";
 
-export default function ScanQR({ provider }: { provider: any }) {
+export default function ScanQR({ provider }: { provider: PhantomProvider | null }) {
 const [showFullAddress, setShowFullAddress] = useState(false);
   const [parsedQR, setParsedQR] = useState<ParsedQR | null>(null);
   const [txStatus, setTxStatus] = useState<TxStatus>("idle");
@@ -33,7 +34,6 @@ const [showFullAddress, setShowFullAddress] = useState(false);
         { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
         async (decodedText: string) => {
-          // Останавливаем сканер сразу после сканирования
           try { await qrRef.current?.stop(); } catch {}
           try {
             const parsed: ParsedQR = JSON.parse(decodedText);
@@ -43,6 +43,10 @@ const [showFullAddress, setShowFullAddress] = useState(false);
           } catch {
             setParsedQR(null);
           }
+        },
+        (errorMessage: string) => {
+          // Можно игнорировать или логировать ошибки сканирования
+          console.warn("QR scan error:", errorMessage);
         }
       );
     } catch (err) {
