@@ -16,6 +16,9 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Wallet, LogOut, QrCode, Zap } from 'lucide-react';
+import { QRCodeSVG } from "qrcode.react";
+import ScanQR from "@/components/ScanQR";
+import GenerateQR from "@/components/GenerateQR";
 
 
 export default function Home() {
@@ -151,27 +154,10 @@ export default function Home() {
               <div className="flex flex-col gap-4">
                 {/* Результат выбора */}
                 {action === "generate" && (
-                  <div className="p-3 border rounded-md text-sm">
-                    <p>🔗 Сгенерирован QR для вашего адреса:</p>
-                    <p className="font-mono">{walletAddress}</p>
-                    <p className="text-muted-foreground">
-                      Можно показать для приёма платежа
-                    </p>
-                  </div>
+                  <GenerateQR walletAddress={walletAddress} />
                 )}
 
-                {action === "pay" && (
-                  <div className="p-3 border rounded-md text-sm">
-                    <p>💸 Оплата по QR</p>
-                    <p>
-                      Вы отправите <b>0.01 SOL</b> на адрес:
-                    </p>
-                    <p className="font-mono">8fj39d...29sP</p>
-                    <Button className="mt-2 w-full" size="sm">
-                      Подтвердить оплату
-                    </Button>
-                  </div>
-                )}
+                {action === "pay" && <ScanQR provider={provider} />}
 
                 {/* Кнопка назад */}
                 <Button
