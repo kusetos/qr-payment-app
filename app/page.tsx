@@ -89,14 +89,11 @@ export default function Home() {
       <div className="w-full flex justify-between items-center max-w-2xl">
         <div className="flex items-center gap-3 mb-8">
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-md flex items-center justify-center shadow-lg">
               <QrCode className="w-6 h-6 text-white" />
             </div>
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
-              <Zap className="w-2 h-2 text-white" />
-            </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">QR Payment App</h1>
+          <h1 className="text-xl font-bold text-foreground">Q-PAY</h1>
         </div>
         <div className="flex items-center gap-2 pb-6">
           <ModeToggle />
